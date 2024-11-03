@@ -22,26 +22,113 @@ int main(int argc, char const *argv[])
     {
     private:
         Node *root;
-        void _remove(int value, Node *node)
+        Node *findMin(Node *node)
         {
-            if (root != nullptr)
+            if (node->sonl != nullptr)
+                return findMin(node->sonl);
+            else
+                return node;
+        }
+        Node *findMax(Node *node)
+        {
+            if (node->sonr != nullptr)
+                return findMax(node->sonr);
+            else
+                return node;
+        }
+        Node *_removeMin(int value, Node *node)
+        {
+            // Caso base: árbol vacío
+            if (node == nullptr)
             {
-                if (value == root->value)
-                {
-                    root = root->sonl;
-                    if (root->sonl != nullptr)
-                    {
-                        _remove(root->sonl->value, root->sonl);
-                    }
-                    else
-                        return;
-                }
-                else if (value < root->value)
-                    _remove(value, root->sonl);
-                else if (value > root->value)
-                    _remove(value, root->sonr);
+                return nullptr;
             }
-            return;
+
+            // Búsqueda del nodo
+            if (value < node->value)
+            {
+                node->sonl = _removeMin(value, node->sonl);
+            }
+            else if (value > node->value)
+            {
+                node->sonr = _removeMin(value, node->sonr);
+            }
+            // Nodo encontrado
+            else
+            {
+                // Caso 1: Nodo hoja
+                if (node->sonl == nullptr && node->sonr == nullptr)
+                {
+                    delete node;
+                    return nullptr;
+                }
+                // Caso 2: Solo hijo izquierdo
+                if (node->sonl != nullptr && node->sonr == nullptr)
+                {
+                    Node *temp = node->sonl;
+                    delete node;
+                    return temp;
+                }
+                // Caso 3: Solo hijo derecho
+                if (node->sonr != nullptr && node->sonl == nullptr)
+                {
+                    Node *temp = node->sonr;
+                    delete node;
+                    return temp;
+                }
+                // Caso 4: Dos hijos
+                Node *temp = findMin(node->sonr);
+                node->value = temp->value;
+                node->sonr = _removeMin(temp->value, node->sonr);
+            }
+            return node;
+        }
+        Node *_removeMax(int value, Node *node)
+        {
+            // Caso base: árbol vacío
+            if (node == nullptr)
+            {
+                return nullptr;
+            }
+
+            // Búsqueda del nodo
+            if (value < node->value)
+            {
+                node->sonl = _removeMax(value, node->sonl);
+            }
+            else if (value > node->value)
+            {
+                node->sonr = _removeMax(value, node->sonr);
+            }
+            // Nodo encontrado
+            else
+            {
+                // Caso 1: Nodo hoja
+                if (node->sonl == nullptr && node->sonr == nullptr)
+                {
+                    delete node;
+                    return nullptr;
+                }
+                // Caso 2: Solo hijo izquierdo
+                if (node->sonl != nullptr && node->sonr == nullptr)
+                {
+                    Node *temp = node->sonl;
+                    delete node;
+                    return temp;
+                }
+                // Caso 3: Solo hijo derecho
+                if (node->sonr != nullptr && node->sonl == nullptr)
+                {
+                    Node *temp = node->sonr;
+                    delete node;
+                    return temp;
+                }
+                // Caso 4: Dos hijos
+                Node *temp = findMax(node->sonl);
+                node->value = temp->value;
+                node->sonl = _removeMax(temp->value, node->sonl);
+            }
+            return node;
         }
         void _insert(int value, Node *root)
         {
@@ -58,7 +145,7 @@ int main(int argc, char const *argv[])
             else
                 cout << "already in the 3" << endl;
         }
-        int _printPreO(Node *root)
+        void _printPreO(Node *root)
         {
             cout << root->value << endl;
             if (root->sonl != nullptr)
@@ -69,13 +156,13 @@ int main(int argc, char const *argv[])
             {
                 _printPreO(root->sonr);
             }
-            return 0;
+            return;
         }
-        int _printPostO(Node *root)
+        void _printPostO(Node *root)
         {
             if (root == nullptr)
             {
-                return 0;
+                return;
             }
 
             if (root->sonl != nullptr)
@@ -89,7 +176,7 @@ int main(int argc, char const *argv[])
             }
 
             cout << root->value << endl;
-            return 1;
+            return;
         }
         void _printInO(Node *root)
         {
@@ -118,19 +205,27 @@ int main(int argc, char const *argv[])
             else if (value > root->value)
                 return _search(value, root->sonr);
         }
-        int _printLeftSide(Node *node)
+        int _printLeftSide(Node *node, int h = 0)
         {
-            int h = 0;
-            cout << root->value << endl;
-            if (node->sonr != nullptr)
+            if (h == 0)
             {
-                h += _printLeftSide(node->sonr);
+                if (node->sonr != nullptr)
+                {
+                    cout << root->value << endl;
+                    return 1 + _printLeftSide(node->sonr);
+                }
+                else if (node->sonl != nullptr)
+                {
+                    cout << root->value << endl;
+                    return 1 + _printLeftSide(node->sonr);
+                }
+                else
+                    return 1;
             }
-            else if (node->sonl != nullptr)
+            else
             {
-                h += _printLeftSide(node->sonr);
-            }else
-                return 1;
+                if
+            }
         }
 
     public:
@@ -189,14 +284,16 @@ int main(int argc, char const *argv[])
         {
             return root;
         }
-        void remove(int value)
+        void remove(int value, bool MaxMin_MinMax = false)
         {
-            if (root == nullptr and !search(value))
+            if (root == nullptr || !search(value))
             {
                 cout << "error empty 3 or element not found" << endl;
             }
+            else if (MaxMin_MinMax)
+                root = _removeMin(value, root);
             else
-                _remove(value, root);
+                root = _removeMax(value, root);
         }
 
         int sumBin3(Bin3 *arbol)
@@ -211,7 +308,15 @@ int main(int argc, char const *argv[])
             if (root == nullptr)
                 cout << "error empty tree" << endl;
             else
-                _printLeftSide(root);
+            {
+                cout << root->value << endl;
+                int hr = _printLeftSide(root->sonr);
+                int hl = _printLeftSide(root->sonl);
+                if (hl > hr)
+                {
+                    _printLeftSide(root->sonl, hr);
+                }
+            }
         }
     };
 
