@@ -205,27 +205,24 @@ int main(int argc, char const *argv[])
             else if (value > root->value)
                 return _search(value, root->sonr);
         }
-        int _printLeftSide(Node *node, int h = 0)
+        void _printRightSide(Node *node, int currentLevel, int &maxLevel)
         {
-            if (h == 0)
+            // Caso base: Si el nodo es nulo, no hay nada que imprimir
+            if (node == nullptr)
             {
-                if (node->sonr != nullptr)
-                {
-                    cout << root->value << endl;
-                    return 1 + _printLeftSide(node->sonr);
-                }
-                else if (node->sonl != nullptr)
-                {
-                    cout << root->value << endl;
-                    return 1 + _printLeftSide(node->sonr);
-                }
-                else
-                    return 1;
+                return;
             }
-            else
+
+            // Si estamos en un nivel mayor al máximo nivel visitado, mostramos el nodo
+            if (currentLevel > maxLevel)
             {
-                if
+                cout << node->value << endl;
+                maxLevel = currentLevel;
             }
+
+            // Recorrer primero el hijo derecho y luego el hijo izquierdo
+            _printRightSide(node->sonr, currentLevel + 1, maxLevel);
+            _printRightSide(node->sonl, currentLevel + 1, maxLevel);
         }
 
     public:
@@ -296,27 +293,10 @@ int main(int argc, char const *argv[])
                 root = _removeMax(value, root);
         }
 
-        int sumBin3(Bin3 *arbol)
+        void printRightSide(Node *root)
         {
-            if (arbol->getroot() != nullptr)
-            {
-            }
-        }
-
-        void printLeftSide()
-        {
-            if (root == nullptr)
-                cout << "error empty tree" << endl;
-            else
-            {
-                cout << root->value << endl;
-                int hr = _printLeftSide(root->sonr);
-                int hl = _printLeftSide(root->sonl);
-                if (hl > hr)
-                {
-                    _printLeftSide(root->sonl, hr);
-                }
-            }
+            int maxLevel = -1; // Inicializamos el máximo nivel visitado
+            _printRightSide(root, 0, maxLevel);
         }
     };
 
