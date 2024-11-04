@@ -231,6 +231,26 @@ int main(int argc, char const *argv[])
             root = nullptr;
         }
 
+        int sumL(Bin3 *AB, int n)
+        {
+            if (AB == nullptr)
+                return 0;
+            else
+                return _sumL(AB->getroot(), n);
+        }
+        int _sumL(Node *node, int n, int actual = 1)
+        {
+            if (node != nullptr)
+            {
+                if (actual == n)
+                    return node->value;
+                else if (actual < n)
+                    return _sumL(node->sonl, n, actual + 1) + _sumL(node->sonr, n, actual + 1);
+            }
+            else
+                return 0;
+        }
+
         void insert(int value)
         {
             if (root == nullptr)
