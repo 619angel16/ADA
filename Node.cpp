@@ -1,31 +1,29 @@
-//
-// Created by USER on 28/05/2025.
-//
-
 #include "Node.h"
 
-Node::Node(string name, int value) {
+int Node::id_counter = 0;
+
+Node::Node(int value): value(value)
+{
+    this->id = id_counter++;
+}
+
+Node::Node()
+{
+    this->value = -1;
+    this->id = id_counter++;
+}
+
+void Node::setValue(int value)
+{
     this->value = value;
-    this->name = name;
 }
 
-Node::Node(string name) {
-    this->value = 0;
-    this->name = name;
-}
-
-void Node::setValue(int value) {
-    this->value = value;
-}
-
-void Node::setName(string name) {
-    this->name = name;
-}
-
-int Node::getValue() {
+int Node::getValue()
+{
     return this->value;
 }
 
-string Node::getName() {
-    return this->name;
+int Node::getId()
+{
+    return this->id;
 }

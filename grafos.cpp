@@ -1,7 +1,5 @@
-#include <string>
-#include <iomanip>
 #include <list>
-#include <map>
+
 #include "Graph.h"
 
 using namespace std;
@@ -9,26 +7,39 @@ using namespace std;
 int main(int argc, char const *argv[]) {
 
     list<Node *> nodeList;
-    list<pair<string, string> > adjMatrix;
-    Node a("A", 10);
-    Node b("B", 20);
-    Node c("C", 30);
-    Node d("D", 40);
+    Node a(10);
+    Node b(20);
+    Node c(30);
+    Node d(40);
+    Node e(50);
+
 
     Node *ptr_a = &a;
     Node *ptr_b = &b;
     Node *ptr_c = &c;
     Node *ptr_d = &d;
+    Node *ptr_e = &e;
 
     nodeList.emplace_back(ptr_a);
     nodeList.push_back(ptr_b);
     nodeList.push_back(ptr_c);
     nodeList.push_back(ptr_d);
+    nodeList.push_back(ptr_e);
 
-    adjMatrix.emplace_back("A", "B");
-    adjMatrix.emplace_back("A", "C");
-    adjMatrix.emplace_back("B", "D");
+    Graph g(nodeList);
 
-    Graph g(nodeList, adjMatrix);
+
+    g.insertEdge(ptr_a , ptr_c);
+    g.insertEdge(ptr_a, ptr_b);
+    g.insertEdge(ptr_b, ptr_e);
+    g.insertEdge(ptr_c, ptr_d);
+    g.insertEdge(ptr_d, ptr_b);
     g.printAll();
+
+    // g.startMatrixA();
+    // g.printMatrixA();
+
+    g.printDFS(0);
+    cout << endl;
+    g.printBFS(0);
 }
