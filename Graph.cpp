@@ -36,6 +36,20 @@ Graph::Graph(list<Node*> listNode)
     }
 }
 
+Graph::Graph(Node* nodes[10])
+{
+    int it = 0;
+    for (Node* node : nodes)
+    {
+        if (it >= 10) break;
+        vtx[it++] = node;
+    }
+    for (int i = 0; i < 45; i++)
+    {
+        edges[i] = nullptr;
+    }
+}
+
 void Graph::insertNode(Node* newNode)
 {
     for (int it = 0; it < 10; it++)
@@ -59,6 +73,90 @@ void Graph::insertEdge(Node* src, Node* dst)
                     break;
                 }
     }
+}
+
+void Graph::insertEdge(Node* src, Node* dst, int cost)
+{
+    if (searchVertex(src) != nullptr && searchVertex(dst) != nullptr)
+    {
+        if (searchEdge(src, dst) == nullptr)
+            for (int i = 0; i < 45; i++)
+                if (edges[i] == nullptr)
+                {
+                    edges[i] = new Edge{src, dst, cost};
+                    break;
+                }
+    }
+}
+
+void Graph::prim(int src)
+{
+    Node* visited[10] = {};
+    bin3 MST;
+    int it = 0;
+    if (!isEmpty() && !isEmptyEdges())
+    {
+        if (getVtx(src) != nullptr)
+        {
+            visited[it++] = getVtx(src);
+            MST.insertNode(getVtx(src));
+            _prim(visited, it, MST, 5);
+        }
+        cout << "MST construido exitosamente" << endl;
+        MST.printOrden(0);
+    }
+}
+
+void Graph::_prim(Node* visited[10], int it, bin3 MST, int totalVtx)
+{
+    if (it >= totalVtx)
+        return;
+    Edge* minCost = {};
+    Node* next = nullptr;
+    if (!isEmptyEdges())
+    {
+        for (auto edge : edges)
+        {
+            if (edge == nullptr)
+                continue;
+            if (isIn(edge->src, visited) && !isIn(edge->dst, visited))
+            {
+                if (minCost == nullptr || minCost->cost > edge->cost)
+                {
+                    minCost = edge;
+                    next = edge->dst;
+                }
+            }/*else if (!isIn(edge->src, visited) && isIn(edge->dst, visited))
+            {
+                if (minCost == nullptr || edge->cost < minCost->cost)
+                {
+                    minCost = edge;
+                    next = edge->src;
+                }
+            }*/ //esto sería para grafos no dirigidos
+        }
+        if (minCost != nullptr && next != nullptr)
+        {
+            visited[it] = next;
+            MST.insertNode(next);
+            cout << "Agregando arista: " << minCost->src->getId()
+                << " -> " << minCost->dst->getId()
+                << " (costo: " << minCost->cost << ")" << endl;
+
+            _prim(visited, it + 1, MST, totalVtx);
+        }
+    }
+}
+
+void Graph::kruskal()
+{
+    Graph gres(this->vtx);
+    Edge* gresEdges = getEdgesSortedByCost();
+}
+
+void kruskal (Graph gres)
+{
+
 }
 
 void Graph::startMatrixA()
@@ -91,7 +189,7 @@ void Graph::printMatrixA()
     }
 }
 
-bool Graph::inVisited(Node* node, Node* visited[10])
+bool Graph::isIn(Node* node, Node* visited[10])
 {
     for (int i = 0; i < 10; i++)
     {
@@ -100,6 +198,33 @@ bool Graph::inVisited(Node* node, Node* visited[10])
     }
     return false;
 }
+
+Edge** Graph::getEdgesSortedByCost() {
+    // Contar cuántas aristas válidas hay
+    int count = 0;
+    for (int i = 0; i < 45; i++) {
+        if (edges[i] != nullptr)
+            count++;
+    }
+
+    // Crear un nuevo array para copiarlas
+    Edge** sorted = new Edge*[count];
+    int index = 0;
+    for (int i = 0; i < 45; i++) {
+        if (edges[i] != nullptr)
+            sorted[index++] = edges[i];
+    }
+
+    // Ordenar por coste de menor a mayor
+    std::sort(sorted, sorted + count, [](Edge* a, Edge* b) {
+        return a->cost < b->cost;
+    });
+
+    // Devolver el array ordenado
+    return sorted;
+}
+
+
 
 
 void Graph::printDFS(Node* src)
@@ -116,7 +241,7 @@ void Graph::_printDFS(Node* src, Node* visited[10], int& it)
 {
     if (!isEmptyEdges())
     {
-        if (inVisited(src, visited))
+        if (isIn(src, visited))
             return;
         cout << src->getId() << " --> ";
         visited[it++] = src;
@@ -182,7 +307,7 @@ void Graph::_printBFS(Node* visited[10], Node* queue[10], int front, int last, i
             if (edge != nullptr)
                 if (edge->src->getId() == queue[front]->getId())
                 {
-                    if (!inVisited(edge->dst, visited))
+                    if (!isIn(edge->dst, visited))
                     {
                         cout << edge->dst->getId() << " --> ";
                         visited[it++] = edge->dst;

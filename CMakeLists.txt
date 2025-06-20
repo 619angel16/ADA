@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 14)
 # Archivos fuente
 set(SOURCES
         Graph.h
+        bin3.h
+        bin3.cpp
         Graph.cpp
         grafos.cpp
         Node.h

@@ -6,6 +6,8 @@
 #define GRAPH_H
 #include <list>
 #include "Node.h"
+#include <algorithm>
+#include "bin3.h"
 
 struct Edge
 {
@@ -26,6 +28,8 @@ public:
     Graph(Node* newNode);
 
     Graph(list<Node*> listNode);
+
+    Graph(Node* nodes[10]);
 
     bool isEmpty();
 
@@ -49,13 +53,25 @@ public:
 
     void insertEdge(Node* node1, Node* node2);
 
+    void insertEdge(Node* node1, Node* node2, int cost);
+
+    void prim(int src);
+
+    void _prim(Node* visited[10], int it, bin3 MST, int totalVtx);
+
+    void kruskal ();
+
+    void _kruskal();
+
     void startMatrixA();
 
     void printMatrixA();
 
     void printDFS(Node* src);
 
-    bool inVisited(Node* node, Node* visited[10]);
+    bool isIn(Node* node, Node* visited[10]);
+
+    Edge** getEdgesSortedByCost();
 
     void _printDFS(Node* src, Node* visited[10], int& it);
 

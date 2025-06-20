@@ -26,15 +26,13 @@ int main(int argc, char const *argv[])
         {
             if (node->sonl != nullptr)
                 return findMin(node->sonl);
-            else
-                return node;
+            return node;
         }
         Node *findMax(Node *node)
         {
             if (node->sonr != nullptr)
                 return findMax(node->sonr);
-            else
-                return node;
+            return node;
         }
         Node *_removeMin(int value, Node *node)
         {

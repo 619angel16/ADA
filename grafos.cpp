@@ -29,11 +29,11 @@ int main(int argc, char const *argv[]) {
     Graph g(nodeList);
 
 
-    g.insertEdge(ptr_a , ptr_c);
-    g.insertEdge(ptr_a, ptr_b);
-    g.insertEdge(ptr_b, ptr_e);
-    g.insertEdge(ptr_c, ptr_d);
-    g.insertEdge(ptr_d, ptr_b);
+    g.insertEdge(ptr_a , ptr_c, 2);
+    g.insertEdge(ptr_a, ptr_b, 3);
+    g.insertEdge(ptr_b, ptr_e,4);
+    g.insertEdge(ptr_c, ptr_d, 5);
+    g.insertEdge(ptr_d, ptr_b, 1);
     g.printAll();
 
     // g.startMatrixA();
@@ -42,4 +42,7 @@ int main(int argc, char const *argv[]) {
     g.printDFS(0);
     cout << endl;
     g.printBFS(0);
+    cout << endl;
+    g.prim(0);
+
 }

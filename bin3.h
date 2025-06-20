@@ -15,15 +15,17 @@ public:
 
     bin3(int value);
 
+    bin3(Node* node);
+
     Node* getroot();
 
     int getHeight();
 
-    int _getHeight(bin3 *sub3);
+    int _getHeight(bin3* sub3);
 
     void printLevel(int level);
 
-    void _printLevel(bin3 *sub3, int level);
+    void _printLevel(bin3* sub3, int level);
 
     bool search(int value);
 

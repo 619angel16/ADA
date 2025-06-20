@@ -8,6 +8,13 @@ bin3::bin3(int value)
     this->rgt = nullptr;
 }
 
+bin3::bin3(Node* node)
+{
+    this->root = node;
+    this->lft = nullptr;
+    this->rgt = nullptr;
+}
+
 bin3::bin3(): root(nullptr), lft(nullptr), rgt(nullptr)
 {
 }
@@ -42,7 +49,7 @@ void bin3::_printLevel(bin3* sub3, int level)
     if (sub3 == nullptr)
         return;
     if (level == 0)
-        cout << sub3->getroot()->getValue() << " ";
+        cout << sub3->getroot()->getId() << " ";
     _printLevel(sub3->lft, level - 1);
     _printLevel(sub3->rgt, level - 1);
 }
@@ -79,7 +86,7 @@ void bin3::insertNode(Node* newNode)
 {
     if (this->root != nullptr)
     {
-        if (this->root->getValue() == newNode->getValue())
+        if (this->root->getId() == newNode->getId())
             cout << "Error node found" << endl;
         else if (newNode->getValue() > this->root->getValue())
         {
@@ -89,7 +96,7 @@ void bin3::insertNode(Node* newNode)
             }
             else
             {
-                this->rgt = new bin3(newNode->getValue());
+                this->rgt = new bin3(newNode);
             }
         }
         else if (newNode->getValue() < this->root->getValue())
@@ -100,7 +107,7 @@ void bin3::insertNode(Node* newNode)
             }
             else
             {
-                this->lft = new bin3(newNode->getValue());
+                this->lft = new bin3(newNode);
             }
         }
     }
@@ -110,7 +117,7 @@ void bin3::insertNode(Node* newNode)
 
 void bin3::_insertNode(bin3* sub3, Node* newNode)
 {
-    if (sub3->root->getValue() == newNode->getValue())
+    if (sub3->root->getId() == newNode->getId())
         cout << "Error node found" << endl;
     else if (newNode->getValue() > sub3->root->getValue())
     {
@@ -120,7 +127,7 @@ void bin3::_insertNode(bin3* sub3, Node* newNode)
         }
         else
         {
-            sub3->rgt = new bin3(newNode->getValue());
+            sub3->rgt = new bin3(newNode);
         }
     }
     else if (newNode->getValue() < sub3->root->getValue())
@@ -131,7 +138,7 @@ void bin3::_insertNode(bin3* sub3, Node* newNode)
         }
         else
         {
-            sub3->lft = new bin3(newNode->getValue());
+            sub3->lft = new bin3(newNode);
         }
     }
 }
@@ -142,7 +149,7 @@ void bin3::printOrden(int choice)
     {
         if (choice == 0)
         {
-            cout << this->root->getValue() << " ";
+            cout << this->root->getId() << " ";
             if (this->lft != nullptr)
                 _printOrden(this->lft, 0);
             if (this->rgt != nullptr)
@@ -152,7 +159,7 @@ void bin3::printOrden(int choice)
         {
             if (this->lft != nullptr)
                 _printOrden(this->lft, choice);
-            cout << this->root->getValue() << " ";
+            cout << this->root->getId() << " ";
             if (this->rgt != nullptr)
                 _printOrden(this->rgt, choice);
         }
@@ -163,7 +170,7 @@ void bin3::printOrden(int choice)
                 _printOrden(this->lft, choice);
             if (this->rgt != nullptr)
                 _printOrden(this->rgt, choice);
-            cout << this->root->getValue() << " ";
+            cout << this->root->getId() << " ";
         }
         if (choice == 3)
         {
@@ -179,7 +186,7 @@ void bin3::_printOrden(bin3* sub3, int choice)
         if (choice == 0)
         {
             //PreOrden
-            cout << sub3->root->getValue() << " ";
+            cout << sub3->root->getId() << " ";
             if (sub3->lft != nullptr)
                 _printOrden(sub3->lft, choice);
             if (sub3->rgt != nullptr)
@@ -190,7 +197,7 @@ void bin3::_printOrden(bin3* sub3, int choice)
             //InOrden
             if (sub3->lft != nullptr)
                 _printOrden(sub3->lft, choice);
-            cout << sub3->root->getValue() << " ";
+            cout << sub3->root->getId() << " ";
             if (sub3->rgt != nullptr)
                 _printOrden(sub3->rgt, choice);
         }
@@ -201,7 +208,7 @@ void bin3::_printOrden(bin3* sub3, int choice)
                 _printOrden(sub3->lft, choice);
             if (sub3->rgt != nullptr)
                 _printOrden(sub3->rgt, choice);
-            cout << sub3->root->getValue() << " ";
+            cout << sub3->root->getId() << " ";
         }
         if (choice == 3)
         {
